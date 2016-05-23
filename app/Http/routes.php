@@ -12,21 +12,19 @@
 */
 Route::get('/', 'PostsController@index');
 
-
-Route::get('/auth', function (){
-
-    if (Auth::attempt(['email' => 'bedgerotto@gmail.com', 'password' => 1233456]))
-    {
-        return "Oi";
-    }
-    return "Falhou";
-});
+Route::controllers(
+[
+    'auth' => 'Auth\AuthController',
+    'password' => 'Auth\PasswordController',
+    'logout' => 'Auth\AuthController',
+    'getLogout' => 'Auth\AuthController'
+]
+);
 
 Route::get('/auth/login', 'Auth\AuthController@getLogin');
+Route::post('/auth/login', 'Auth\AuthController@postLogin');
+Route::get('/admin/logout', 'Auth\AuthController@getLogout');
 
-Route::get('/auth/logout', function(){
-    Auth::logout();
-});
 
 Route::group(['preffix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('admin', ['as' => 'admin.index', 'uses' => 'PostsAdminController@index']);
